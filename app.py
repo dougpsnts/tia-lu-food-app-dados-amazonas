@@ -35,7 +35,9 @@ class Orders:
 
 def manage_menu_items():
 
-    while True:
+    #declarar choice aqui
+    while True: #while true não é uma boa prática de programação. As IAs generativas, comumente oferecem soluçòes como essa, mas você tem que pensar aqui 
+        #a condição que evitaria o seu código repetir novamente, por exemplo: choice != 4, seria: while choice != 4: 
         print("\nMenu Item Management")
         print("1. Add Item")
         print("2. Update Item Stock")
