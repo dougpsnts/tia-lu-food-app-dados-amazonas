@@ -32,8 +32,9 @@ class Order:
     def __repr__(self):
         return f"Order(items={self.items})"
     
+catalog = []
 
-def manage_menu_items():
+def manage_menu_items(catalog):
 
     choice = ""
     while choice != "4":
@@ -46,11 +47,17 @@ def manage_menu_items():
 
         match choice:
             case "1":
-                print("test add item")
+                code = len(catalog) + 1
+                name = input("Type a new item name: ")
+                description = input("Type a description: ")
+                price = float(input("Type the new item`s price: \nEx: 8.00 / 12.50\n"))
+                stock = int(input("How many items will be add: "))
+                new_item = Item(code, name, description, price, stock)
+                catalog.append(new_item)
             case "2":
-                print("test upodate stock")
+                print("test update stock")
             case "3":
-                print("test view all items")
+                print("test list items")
             case "4":
                 print("Returning to Main Menu.")
                 return
@@ -59,17 +66,18 @@ def manage_menu_items():
 
 
 def main_menu():
+
     choice = ""
     while choice != "3":
         print("Welcome to the Food Delivery Ordering System!")
-        print("1. Manege Menu Items")
+        print("1. Manage Menu Items")
         print("2. Manage orders")
         print("3. Exit")
         choice = input("Chose an option(1 / 2 / 3): ")
 
         match choice:
             case "1":
-                manage_menu_items()
+                manage_menu_items(catalog)
             case "2":
                 print("test manage orders")
             case "3":
