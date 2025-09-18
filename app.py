@@ -14,7 +14,7 @@ class Item:
     def __repr__(self):
         return f"Item code= {self.code}\nname= {self.name}\ndescription= {self.description}\nprice= {self.price}\nstock= {self.stock}\n"
     
-class Orders:
+class Order:
     def __init__(self):
         self.items = []
 
@@ -30,12 +30,13 @@ class Orders:
         return sum(item.price * quantity for item, quantity in self.items)
 
     def __repr__(self):
-        return f"Orders(items={self.items})"
+        return f"Order(items={self.items})"
     
 
 def manage_menu_items():
 
-    while True:
+    choice = ""
+    while choice != "4":
         print("\nMenu Item Management")
         print("1. Add Item")
         print("2. Update Item Stock")
@@ -51,12 +52,14 @@ def manage_menu_items():
             case "3":
                 print("test view all items")
             case "4":
-                break
+                print("Returning to Main Menu.")
+                return
             case _:
                 print("Invalid option. Please try again.")
 
 def main_menu():
-    while True:
+    choice = ""
+    while choice != "3":
         print("Welcome to the Food Delivery Ordering System!")
         print("1. Manege Menu Items")
         print("2. Manage orders")
@@ -70,7 +73,7 @@ def main_menu():
                 print("test manage orders")
             case "3":
                 print("Exiting the system. Goodbye!")
-                break
+                return
             case _:
                 print("Invalid option. Please try again.")
 
