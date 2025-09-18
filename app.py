@@ -57,6 +57,7 @@ def manage_menu_items():
             case _:
                 print("Invalid option. Please try again.")
 
+
 def main_menu():
     choice = ""
     while choice != "3":
