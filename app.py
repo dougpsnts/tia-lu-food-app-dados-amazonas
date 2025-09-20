@@ -9,7 +9,8 @@ class Item:
     def update_stock(self, quantity):
         if quantity < 0 and abs(quantity) > self.stock:
             raise ValueError("Insufficient stock to remove the requested quantity.")
-        self.stock += quantity
+        else: 
+            self.stock += quantity
 
     def __repr__(self):
         return f"Item code= {self.code}\nname= {self.name}\ndescription= {self.description}\nprice= {self.price}\nstock= {self.stock}\n"
@@ -21,10 +22,11 @@ class Order:
     def add_item(self, item, quantity):
         if quantity <= 0:
             raise ValueError("Quantity must be positive.")
-        if item.stock < quantity:
+        elif item.stock < quantity:
             raise ValueError("Insufficient stock for the requested item.")
-        item.update_stock(-quantity)
-        self.items.append((item, quantity))
+        else: 
+            item.update_stock(-quantity)
+            self.items.append((item, quantity))
 
     def total_price(self):
         return sum(item.price * quantity for item, quantity in self.items)
@@ -48,16 +50,28 @@ def manage_menu_items(catalog):
         match choice:
             case "1":
                 code = len(catalog) + 1
-                name = input("Type a new item name: ")
-                description = input("Type a description: ")
+                name = input("Type a new item name:\n")
+                description = input("Type a description:\n")
                 price = float(input("Type the new item`s price: \nEx: 8.00 / 12.50\n"))
-                stock = int(input("How many items will be add: "))
+                stock = int(input("How many items will be add:\n"))
                 new_item = Item(code, name, description, price, stock)
                 catalog.append(new_item)
             case "2":
-                print("test update stock")
+                item = input("Type the name of the item:\n")
+                for i in catalog:
+                    if i.name == item:
+                        print(f"O item {i.name} tem {i.stock} unidades em estoque.")
+                        quantity = int(input("Type the new quantity you want to add or take from stock:\n Use a minus sign (-) decrease stock\n"))
+                        try:
+                            i.update_stock(quantity)
+                            print(f"Stock updated. New stock for {i.name}: {i.stock}")
+                        except ValueError as e:
+                            print(e)
+                    else:
+                        print("Item not found. Please try again.")
             case "3":
-                print("test list items")
+                for i in catalog:
+                    print(i)
             case "4":
                 print("Returning to Main Menu.")
                 return
