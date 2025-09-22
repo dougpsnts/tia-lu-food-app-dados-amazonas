@@ -54,11 +54,64 @@ def manage_menu_items(catalog):
                 stock = int(input("How many items will be add: "))
                 new_item = Item(code, name, description, price, stock)
                 catalog.append(new_item)
+                print('Item added with sucess')
             case "2":
                 print("test update stock")
             case "3":
-                print("test list items")
+                print(catalog)
             case "4":
+                print("Returning to Main Menu.")
+                return
+            case _:
+                print("Invalid option. Please try again.")
+
+orders = []
+def manage_orders(orders):
+    choice = ""
+    while choice != "5":
+        print("\nMenu Orders Management")
+        print("1. Create a new Order")
+        print("2. Manage Pending Orders")
+        print("3. Update Orders Status")
+        print("4. Cancel Order")
+        print("5. Return to main menu")
+        choice = input("Chose an option(1 / 2 / 3 / 4 / 5): ")
+
+        match choice:
+            case "1":
+                choice = ""
+                costumer = input('What is the name of the costumer? ')
+                items_order = []
+                order = [costumer, items_order]
+                while choice != 2:
+                    print('1. Insert a new item')
+                    print('2. Finish order')
+                    choice = input('Choose an option (1 / 2): ')
+
+                    match choice:
+                        case "1":
+                            catalog_code = input('Choose a item by code: ')
+                            print(f'Item {catalog_code} added with sucess')
+                            items_order.append(catalog_code)
+                            print(f'{costumer}`s order items are: {items_order}')
+
+                        case "2":
+                            print(f'{costumer}`s order added with sucess.')
+                            print(f'Resume of the order: {order}')
+                            print('Returning to menu.')
+                            orders.append(order)
+                            return
+                        
+                        case _:
+                            print("Invalid option. Please try again.")
+            case "2":
+                print("Managing pending orders")
+                print(orders)
+            case "3":
+                print("Updating orders status")
+            case "4":
+                print("Canceling orders")
+            case "5":
                 print("Returning to Main Menu.")
                 return
             case _:
@@ -79,7 +132,7 @@ def main_menu():
             case "1":
                 manage_menu_items(catalog)
             case "2":
-                print("test manage orders")
+                manage_orders(orders)
             case "3":
                 print("Exiting the system. Goodbye!")
                 return
