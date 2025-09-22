@@ -96,7 +96,7 @@ def manage_orders(orders):
                 costumer = input('\nWhat is the name of the costumer? ')
                 items_order = []
                 payment = 'Paid'
-                #order = [f"Code: {code} / Costumer: {costumer} / Items: {items_order} / Status: {status} / Total: {total_price} / Payment: {payment}"] #order não está mostrando o items_order por causa do formated
+                #order = [f"Code: {code} / Costumer: {costumer} / Items: {items_order} / Status: {status}  / Payment: {payment}"]
                 order = [code, costumer, items_order, status, payment]
                 #discount = total_price * 0,10
                 while choice != 3:
@@ -107,29 +107,49 @@ def manage_orders(orders):
 
                     match choice:
                         case "1":
-                            catalog_code = input('Choose a item by code: ').strip() #criar uma condição para que só possa escolher um numero do tamanho do array.
-                            print(f'\nItem {catalog_code} added with sucess')
-                            items_order.append(catalog_code)
-                            print(f'\n{costumer}`s order items are: {items_order}')
+                            catalog_code = int(input('Choose a item by code: '))
+                             #criar uma condição para que só possa escolher um numero do tamanho do array.
+                             #mostrar catalogo novamente
+                            for item in catalog:
+                                if item.code == catalog_code and item.stock > 0:
+                                    print(f'\nItem {catalog_code} added with sucess')
+                                    items_order.append(catalog_code)
+                                    print(f'\n{costumer}`s order items are: {items_order}')
+                                    item.update_stock(-1)
 
-                        case "2":
-                            print(f'\n{costumer}`s order added with sucess.')
+                                    
+                                elif item.code != catalog_code:
+                                        print('Item not found')
+
+                                elif item.stock <= 0:
+                                    print('Stock insuficient')
+                                    #exibir a quantidade de stock disponivel no futuro.
+                                else:
+                                    print('Verify informations.')
                             
+                        case "2":
+                            if len(items_order) > 0:
+                                print(f'\n{costumer}`s order added with sucess.')
+                                                        
                             # while choice != 2:
                             #     choice = input('\nWould you like to apply a discount cupon of 10%? ( 1. Yes / 2. No ) ')
                                 
                             #     match choice:
                             #         case '1':
                             #             order.total_price = order.total_price - discount
+                            #             return
                                         
                             #         case "2":
                             #             print('Cupon not applied.')
-                                    
-                            pending_orders.append(order)
-                            all_orders.append(order)
-                            print(f'\nResume of the order: {order}')
-                            print('Returning to manage orders.') #deixar opção para manage pending orders
-                            manage_orders(orders)
+                            #             return
+
+                                pending_orders.append(order)
+                                all_orders.append(order)
+                                print(f'\nResume of the order: {order}')
+                                print('Returning to manage orders.') #deixar opção para manage pending orders
+                                manage_orders(orders)
+                            else:
+                                print('\nOrder must have items!\n')
                         
                         case "3":
                             print("\nReturning to menu.")
@@ -148,9 +168,10 @@ def manage_orders(orders):
 
                     match choice:
                         case "1":
-                            print('Order accepted')
+                            print(f'Order {pending_orders[0]} accepted')
                             new_order = pending_orders.pop(0)
                             accepted_orders.append(new_order)
+                            return
                            
                         case "2":
                             print(f'Order {pending_orders[0]} rejected')
@@ -159,7 +180,7 @@ def manage_orders(orders):
                             #criar função para atualizar o status para rejeitado.
                             
                             print('Returning to manage orders')
-                            manage_orders(orders)                       
+                            return                       
                         
                         case "3":
                             print('Returning to manage orders')
@@ -167,7 +188,7 @@ def manage_orders(orders):
                         
                         case _:
                             print("Invalid option. Please try again.")
-                            manage_orders(orders)                       
+                            return                      
 
             case "3":
                 print("Printing all orders")
