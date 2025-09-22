@@ -12,7 +12,7 @@ class Item:
         self.stock += quantity
 
     def __repr__(self):
-        return f"Item code= {self.code}\nname= {self.name}\ndescription= {self.description}\nprice= {self.price}\nstock= {self.stock}\n"
+        return f"\nItem code: {self.code}\nname: {self.name}\ndescription: {self.description}\nprice: R${self.price}\nstock: {self.stock}\n"
     
 class Order:
     def __init__(self):
@@ -65,7 +65,17 @@ def manage_menu_items(catalog):
             case _:
                 print("Invalid option. Please try again.")
 
-orders = []
+all_orders = []
+pending_orders = []
+accepted_orders = []
+making_orders = []
+ready_orders = []
+waiting_delivery_orders = []
+delivering_orders = []
+delivered_orders = []
+canceled_orders = []
+rejected_orders = []
+
 def manage_orders(orders):
     choice = ""
     while choice != "5":
@@ -76,42 +86,100 @@ def manage_orders(orders):
         print("4. Cancel Order")
         print("5. Return to main menu")
         choice = input("Chose an option(1 / 2 / 3 / 4 / 5): ")
-
+        
         match choice:
             case "1":
+                print(catalog)
                 choice = ""
-                costumer = input('What is the name of the costumer? ')
+                code = len(orders) + 1
+                status = 'Waiting Aproval' 
+                costumer = input('\nWhat is the name of the costumer? ')
                 items_order = []
-                order = [costumer, items_order]
-                while choice != 2:
+                payment = 'Paid'
+                #order = [f"Code: {code} / Costumer: {costumer} / Items: {items_order} / Status: {status} / Total: {total_price} / Payment: {payment}"] #order não está mostrando o items_order por causa do formated
+                order = [code, costumer, items_order, status, payment]
+                #discount = total_price * 0,10
+                while choice != 3:
                     print('1. Insert a new item')
                     print('2. Finish order')
-                    choice = input('Choose an option (1 / 2): ')
+                    print('3. Return to menu')
+                    choice = input('\nChoose an option (1 / 2 / 3): ')
 
                     match choice:
                         case "1":
-                            catalog_code = input('Choose a item by code: ')
-                            print(f'Item {catalog_code} added with sucess')
+                            catalog_code = input('Choose a item by code: ').strip() #criar uma condição para que só possa escolher um numero do tamanho do array.
+                            print(f'\nItem {catalog_code} added with sucess')
                             items_order.append(catalog_code)
-                            print(f'{costumer}`s order items are: {items_order}')
+                            print(f'\n{costumer}`s order items are: {items_order}')
 
                         case "2":
-                            print(f'{costumer}`s order added with sucess.')
-                            print(f'Resume of the order: {order}')
-                            print('Returning to menu.')
-                            orders.append(order)
+                            print(f'\n{costumer}`s order added with sucess.')
+                            
+                            # while choice != 2:
+                            #     choice = input('\nWould you like to apply a discount cupon of 10%? ( 1. Yes / 2. No ) ')
+                                
+                            #     match choice:
+                            #         case '1':
+                            #             order.total_price = order.total_price - discount
+                                        
+                            #         case "2":
+                            #             print('Cupon not applied.')
+                                    
+                            pending_orders.append(order)
+                            all_orders.append(order)
+                            print(f'\nResume of the order: {order}')
+                            print('Returning to manage orders.') #deixar opção para manage pending orders
+                            manage_orders(orders)
+                        
+                        case "3":
+                            print("\nReturning to menu.")
+                            return
+                            
+                        case _:
+                            print("Invalid option. Please try again.")
+            case "2":
+                print("\nManaging pending order:")
+                print(pending_orders[0])
+                while choice != 3:
+                    print('1. Accept order')
+                    print('2. Reject order')
+                    print('3. Return to manage orders')
+                    choice = input('\nChoose an option (1 / 2 / 3): ')
+
+                    match choice:
+                        case "1":
+                            print('Order accepted')
+                            new_order = pending_orders.pop(0)
+                            accepted_orders.append(new_order)
+                           
+                        case "2":
+                            print(f'Order {pending_orders[0]} rejected')
+                            rejected_orders.append(pending_orders[0])
+                            pending_orders.pop(0)
+                            #criar função para atualizar o status para rejeitado.
+                            
+                            print('Returning to manage orders')
+                            manage_orders(orders)                       
+                        
+                        case "3":
+                            print('Returning to manage orders')
                             return
                         
                         case _:
                             print("Invalid option. Please try again.")
-            case "2":
-                print("Managing pending orders")
-                print(orders)
+                            manage_orders(orders)                       
+
             case "3":
-                print("Updating orders status")
+                print("Printing all orders")
+                print(orders)
             case "4":
-                print("Canceling orders")
+                print("Printing Accepted orders")
+                print(accepted_orders)
             case "5":
+                print("Printing rejected orders")
+                print(rejected_orders)
+                
+            case "6":
                 print("Returning to Main Menu.")
                 return
             case _:
@@ -122,7 +190,7 @@ def main_menu():
 
     choice = ""
     while choice != "3":
-        print("Welcome to the Food Delivery Ordering System!")
+        print("\nWelcome to the Food Delivery Ordering System!")
         print("1. Manage Menu Items")
         print("2. Manage orders")
         print("3. Exit")
@@ -132,7 +200,7 @@ def main_menu():
             case "1":
                 manage_menu_items(catalog)
             case "2":
-                manage_orders(orders)
+                manage_orders(all_orders)
             case "3":
                 print("Exiting the system. Goodbye!")
                 return
@@ -143,3 +211,13 @@ main_menu()
 
     
 
+# Para mostrar todos os pedidos
+# print(all_orders)
+# Para mostrar apenas os pedidos aceitos
+# print(accepted_orders)
+# Para mostrar apenas os pedidos rejeitados
+# print(rejected_orders)
+# Para mostrar apenas os pedidos prontos: 
+# print(ready_orders)
+# Para mostrar apenas os pedidos cancelados:
+# canceled_orders()
