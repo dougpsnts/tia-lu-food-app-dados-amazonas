@@ -216,11 +216,9 @@ def manage_orders(all_orders, catalog):
                                     print(f'\n{costumer}`s order items are: {[i.name for i in items_order]}')
                                     item.update_stock(-1)
                                     print(f'The current stock for this item is: {item.stock}')
-                                    print(f"\nAdded {item.name} with price R${item.price:.2f}")
-
                                     
-                                elif catalog_code != item.code:
-                                    print('Item not found')  ##### ainda está retornando item not found mesmo quando está com estoque e o codigo esta correto. ######
+                                elif item.code != catalog_code:
+                                    print('Item not found')
                                     break
 
                                 elif item.stock <= 0:
@@ -323,32 +321,29 @@ def manage_orders(all_orders, catalog):
                 print(order)
 
                 print("🔄 Choose the new status:")
-                print("1. Accepted")
-                print("2. Making")
-                print("3. Ready")
-                print("4. Waiting Delivery")
-                print("5. Delivering")
-                print("6. Delivered")
-                print("7. Canceled")
-                print("8. Rejected")
+                print("1. Making")
+                print("2. Ready")
+                print("3. Waiting Delivery")
+                print("4. Delivering")
+                print("5. Delivered")
+                print("6. Canceled")
+                print("7. Rejected")
 
-                status_choice = input("Choose an option (1-8): ")
+                status_choice = input("Choose an option (1-7): ")
 
                 if status_choice == "1":
-                    order.status = "Accepted"
-                elif status_choice == "2":
                     order.status = "Making"
-                elif status_choice == "3":
+                elif status_choice == "2":
                     order.status = "Ready"
-                elif status_choice == "4":
+                elif status_choice == "3":
                     order.status = "Waiting Delivery"
-                elif status_choice == "5":
+                elif status_choice == "4":
                     order.status = "Delivering"
-                elif status_choice == "6":
+                elif status_choice == "5":
                     order.status = "Delivered"
-                elif status_choice == "7":
+                elif status_choice == "6":
                     order.status = "Canceled"
-                elif status_choice == "8":
+                elif status_choice == "7":
                     order.status = "Rejected"
                 else:
                     print("❌ Invalid option.")
