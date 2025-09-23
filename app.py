@@ -12,6 +12,28 @@ class Item:
         else: 
             self.stock += quantity
 
+    def update_name(self):
+        confirm = input(f"You are about to change the name of the product {self.name}\n( 1. Yes / 2. No ) ")
+        if confirm == "1":
+            new_name = input("Type the new name: ")
+            self.name = new_name
+            print(f"The name of the item code:{self.code} has changed to {self.name}")
+        else:
+            print("Operation canceled")
+            return
+    
+    def update_description(self):
+        print(f"Current description:\n{self.description}")
+        new_description = input("Type a new description: ")
+        confirm = input(f"You are about to change the description of the product {self.name}\n( 1. Yes / 2. No ) ")
+        if confirm == "1":
+            self.description = new_description
+            print(f"Description of the item {self.name} has changed")
+        else:
+            print("Operation canceled")
+            return
+            
+
     def __repr__(self):
         return f"Item code= {self.code}\nname= {self.name}\ndescription= {self.description}\nprice= {self.price}\nstock= {self.stock}\n"
     
@@ -60,13 +82,34 @@ def manage_menu_items(catalog):
                 item = input("Type the name of the item:\n")
                 for i in catalog:
                     if i.name == item:
-                        print(f"O item {i.name} tem {i.stock} unidades em estoque.")
-                        quantity = int(input("Type the new quantity you want to add or take from stock:\n Use a minus sign (-) decrease stock\n"))
-                        try:
-                            i.update_stock(quantity)
-                            print(f"Stock updated. New stock for {i.name}: {i.stock}")
-                        except ValueError as e:
-                            print(e)
+                        update_type = ""
+                        while update_type != "5":
+                            print("1. Update item`s name")
+                            print("2. Update item`s description")
+                            print("3. Update item`s price")
+                            print("4. Update item`s quantity")
+                            print("5. Back to previous menu")
+                            update_type = input("Choose an option (1 / 2 / 3 / 4 / 5): ")
+                        
+                            match update_type:
+                                case "1":
+                                    i.update_name()
+                                case "2":
+                                    i.update_description()
+                                case "3":
+                                    print("Test option 3")
+                                case "4":
+                                    print(f"The item {i.name} has {i.stock} units in stock.")
+                                    quantity = int(input("Type the new quantity you want to add or take from stock:\n Use a minus sign (-) decrease stock\n"))
+                                    try:
+                                        i.update_stock(quantity)
+                                        print(f"Stock updated. New stock for {i.name}: {i.stock}")
+                                    except ValueError as e:
+                                        print(e)
+                                case "5":
+                                    return
+                                case _:
+                                    print("Invalid option. Please try again.")
                     else:
                         print("Item not found. Please try again.")
             case "3":
