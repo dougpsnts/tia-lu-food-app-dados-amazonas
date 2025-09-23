@@ -13,7 +13,7 @@ class Item:
             self.stock += quantity
 
     def update_name(self):
-        confirm = input(f"You are about to change the name of the product {self.name}\n( 1. Yes / 2. No ) ")
+        confirm = input(f"You are about to change the name of the product {self.name}\n(Confirm? 1. Yes / 2. No ) ")
         if confirm == "1":
             new_name = input("Type the new name: ")
             self.name = new_name
@@ -25,14 +25,24 @@ class Item:
     def update_description(self):
         print(f"Current description:\n{self.description}")
         new_description = input("Type a new description: ")
-        confirm = input(f"You are about to change the description of the product {self.name}\n( 1. Yes / 2. No ) ")
+        confirm = input(f"You are about to change the description of the product {self.name}\n(Confirm? 1. Yes / 2. No ) ")
         if confirm == "1":
             self.description = new_description
             print(f"Description of the item {self.name} has changed")
         else:
             print("Operation canceled")
             return
-            
+
+    def update_price(self):
+        print(f"Current price:\n{self.price}")  
+        new_price = input("Type a new price: ")
+        confirm = input(f"You are about to change the price of the product {self.name} to R${new_price}\n(Confirm? 1. Yes / 2. No ) ")
+        if confirm == "1":
+            self.price = new_price
+            print(f"Price of the item {self.name} has changed to R${self.price}")
+        else:
+            print("Operation canceled")
+            return
 
     def __repr__(self):
         return f"\nItem code: {self.code}\nname: {self.name}\ndescription: {self.description}\nprice: R${self.price}\nstock: {self.stock}\n"
@@ -98,7 +108,7 @@ def manage_menu_items(catalog):
                                 case "2":
                                     i.update_description()
                                 case "3":
-                                    print("Test option 3")
+                                    i.update_price()
                                 case "4":
                                     print(f"The item {i.name} has {i.stock} units in stock.")
                                     quantity = int(input("Type the new quantity you want to add or take from stock:\n Use a minus sign (-) decrease stock\n"))
@@ -111,8 +121,8 @@ def manage_menu_items(catalog):
                                     return
                                 case _:
                                     print("Invalid option. Please try again.")
-                    else:
-                        print("Item not found. Please try again.")
+                else:
+                    print("Item not found. Please try again.")
             case "3":
                 for i in catalog:
                     print(i)
