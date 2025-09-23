@@ -48,24 +48,40 @@ class Item:
         return f"\nItem code: {self.code}\nname: {self.name}\ndescription: {self.description}\nprice: R${self.price}\nstock: {self.stock}\n"
     
 class Order:
-    def __init__(self):
-        self.items = []
-
-    def add_item(self, item, quantity):
-        if quantity <= 0:
-            raise ValueError("Quantity must be positive.")
-        elif item.stock < quantity:
-            raise ValueError("Insufficient stock for the requested item.")
-        else: 
-            item.update_stock(-quantity)
-            self.items.append((item, quantity))
+    def __init__(self, code, costumer, items_order=[], status="Pending", payment="Paid"):
+        self.code = code 
+        self.costumer = costumer
+        self.items_order = items_order
+        self.status = status
+        self.payment = payment
+        self.order_total_price = None
 
     def total_price(self):
-        return sum(item.price * quantity for item, quantity in self.items)
+        return sum(item.price for item in self.items_order)
 
+    def apply_discount(self):
+        if not self.items_order:
+            raise ValueError("It's not possible to apply discount in a empty order.")
+        discount_value = self.total_price() * (10 / 100)
+        self.order_total_price = self.total_price() - discount_value
+        return self.order_total_price
+
+    def finalize(self):
+        if self.order_total_price is None:
+            self.order_total_price = self.total_price()
+        return self.order_total_price
+        
     def __repr__(self):
-        return f"Order(items={self.items})"
-    
+        total = self.order_total_price if self.order_total_price is not None else self.total_price()
+        items_list = ", ".join(item.name for item in self.items_order) if self.items_order else "No items"
+        return (
+            f"\n📦 Order: {self.code}\n"
+            f"👤 Costumer: {self.costumer}\n"
+            f"🛒 Items: {items_list}\n"
+            f"💰 Total: R${total:.2f}\n"
+            f"📌 Status: {self.status}\n"
+        )
+   
 catalog = []
 
 def manage_menu_items(catalog):
@@ -123,9 +139,22 @@ def manage_menu_items(catalog):
                                     print("Invalid option. Please try again.")
                 else:
                     print("Item not found. Please try again.")
+
             case "3":
-                for i in catalog:
-                    print(i)
+                if not catalog:
+                    print("⚠️ No items on the menu.")
+                    continue
+
+                print("\n📋 Menu list of items:")
+                print("-" * 40)
+                for item in catalog:
+                    print(f"📦 Code: {item.code}")
+                    print(f"📝 Name: {item.name}")
+                    print(f"🖊️ Description: {item.description}")
+                    print(f"💰 Price: R${item.price:.2f}")
+                    print(f"📦 Stock: {item.stock}")
+                    print("-" * 40)
+
             case "4":
                 print("Returning to Main Menu.")
                 return
@@ -133,17 +162,11 @@ def manage_menu_items(catalog):
                 print("Invalid option. Please try again.")
 
 all_orders = []
-pending_orders = []
-accepted_orders = []
-making_orders = []
-ready_orders = []
-waiting_delivery_orders = []
-delivering_orders = []
-delivered_orders = []
-canceled_orders = []
-rejected_orders = []
 
-def manage_orders(orders):
+def get_orders_by_status(status):
+    return [o for o in all_orders if o.status == status]
+
+def manage_orders(all_orders, catalog):
     choice = ""
     while choice != "5":
         print("\nMenu Orders Management")
@@ -156,123 +179,230 @@ def manage_orders(orders):
         
         match choice:
             case "1":
-                print(catalog)
-                choice = ""
-                code = len(orders) + 1
-                status = 'Waiting Aproval' 
+                code = len(all_orders) + 1
                 costumer = input('\nWhat is the name of the costumer? ')
                 items_order = []
+                status = "" 
                 payment = 'Paid'
-                #order = [f"Code: {code} / Costumer: {costumer} / Items: {items_order} / Status: {status}  / Payment: {payment}"]
-                order = [code, costumer, items_order, status, payment]
-                #discount = total_price * 0,10
-                while choice != 3:
+                order = Order(code, costumer, items_order, status, payment)
+                choice = ""
+                while choice != "3":
                     print('1. Insert a new item')
                     print('2. Finish order')
-                    print('3. Return to menu')
+                    print('3. Cancell order creation')
                     choice = input('\nChoose an option (1 / 2 / 3): ')
 
                     match choice:
                         case "1":
+                            if catalog == []:
+                                print('The menu is empty, please add some items to proceed.')
+                                return
+                            
+                            print("\n📋 Menu list of items:")
+                            print("-" * 40)
+                            for item in catalog:
+                                print(f"📦 Code: {item.code}")
+                                print(f"📝 Name: {item.name}")
+                                print(f"🖊️ Description: {item.description}")
+                                print(f"💰 Price: R${item.price:.2f}")
+                                print(f"📦 Stock: {item.stock}")
+                                print("-" * 40)
                             catalog_code = int(input('Choose a item by code: '))
-                             #criar uma condição para que só possa escolher um numero do tamanho do array.
-                             #mostrar catalogo novamente
+
                             for item in catalog:
                                 if item.code == catalog_code and item.stock > 0:
                                     print(f'\nItem {catalog_code} added with sucess')
-                                    items_order.append(catalog_code)
-                                    print(f'\n{costumer}`s order items are: {items_order}')
+                                    items_order.append(item)
+                                    print(f'\n{costumer}`s order items are: {[i.name for i in items_order]}')
                                     item.update_stock(-1)
+                                    print(f'The current stock for this item is: {item.stock}')
+                                    print(f"\nAdded {item.name} with price R${item.price:.2f}")
 
                                     
-                                elif item.code != catalog_code:
-                                        print('Item not found')
+                                elif catalog_code != item.code:
+                                    print('Item not found')  ##### ainda está retornando item not found mesmo quando está com estoque e o codigo esta correto. ######
+                                    break
 
                                 elif item.stock <= 0:
                                     print('Stock insuficient')
-                                    #exibir a quantidade de stock disponivel no futuro.
+                                    print(f'The current stock for this item is: {item.stock}\n')
+                                    break
                                 else:
                                     print('Verify informations.')
                             
                         case "2":
-                            if len(items_order) > 0:
-                                print(f'\n{costumer}`s order added with sucess.')
-                                                        
-                            # while choice != 2:
-                            #     choice = input('\nWould you like to apply a discount cupon of 10%? ( 1. Yes / 2. No ) ')
-                                
-                            #     match choice:
-                            #         case '1':
-                            #             order.total_price = order.total_price - discount
-                            #             return
-                                        
-                            #         case "2":
-                            #             print('Cupon not applied.')
-                            #             return
+                            if len(items_order) == 0:
+                                print("Order must have at least one item!")
+                                continue
 
-                                pending_orders.append(order)
-                                all_orders.append(order)
-                                print(f'\nResume of the order: {order}')
-                                print('Returning to manage orders.') #deixar opção para manage pending orders
-                                manage_orders(orders)
-                            else:
-                                print('\nOrder must have items!\n')
+                            print(f"The current value of the order is: R${order.total_price():.2f}")
+
+                            discount_choice = input("Would you like to apply a discount coupon of 10%? (1. Yes / 2. No): ")
+
+                            match discount_choice:
+                                case "1":
+                                    order.apply_discount() 
+                                    print(f"\nCoupon applied successfully. New total: R${order.order_total_price:.2f}")
+                                case "2":
+                                    order.finalize()  
+                                    print(f"\nNo discount applied. Total: R${order.order_total_price:.2f}")
+                                case _:
+                                    print("Invalid option. Proceeding without discount.")
+                                    order.finalize()
+
+                            order.status = "Pending"
+                            all_orders.append(order)
+
+                            print("\n✅ Order added with sucess!")
+                            print("-" * 40)
+                            print(f"Code: {order.code}")
+                            print(f"Costumer: {order.costumer}")
+                            print(f"Items: {', '.join([item.name for item in order.items_order])}")
+                            print(f"Status: {order.status}")
+                            print(f"Total: R${order.order_total_price:.2f}")
+                            print("-" * 40)
+                            print("\nReturning to manage orders.\n")
+                            break 
                         
                         case "3":
-                            print("\nReturning to menu.")
-                            return
+                            print("Cancelling order creation.")
+                            break
                             
                         case _:
                             print("Invalid option. Please try again.")
+                            continue
             case "2":
-                print("\nManaging pending order:")
-                print(pending_orders[0])
-                while choice != 3:
-                    print('1. Accept order')
-                    print('2. Reject order')
-                    print('3. Return to manage orders')
-                    choice = input('\nChoose an option (1 / 2 / 3): ')
+                pending_orders = get_orders_by_status("Pending")
+                if not pending_orders:
+                    print("No pending orders.")
+                    continue
+                
+                order = pending_orders[0]
+                print("\n📦 Pending Order:")
+                print(order)
 
-                    match choice:
-                        case "1":
-                            print(f'Order {pending_orders[0]} accepted')
-                            new_order = pending_orders.pop(0)
-                            accepted_orders.append(new_order)
-                            return
-                           
-                        case "2":
-                            print(f'Order {pending_orders[0]} rejected')
-                            rejected_orders.append(pending_orders[0])
-                            pending_orders.pop(0)
-                            #criar função para atualizar o status para rejeitado.
+                print("1. Accept order")
+                print("2. Reject order")
+                print("3. Return to manage orders")
+                choice = input("Choose an option (1 / 2 / 3): ")
+
+                if choice == "1":
+                    order.status = "Accepted"
+                    print("\n✅ Order accepted with sucess!")
+                    print(order)
+
+                elif choice == "2":
+                    order.status = "Rejected"
+                    print("\n❌ Order rejected.")
+                    print(order)                        
+
+                elif choice == "3":
+                    print("Returning to manage orders.")
+                    
+                else:
+                    print("Invalid option.") 
                             
-                            print('Returning to manage orders')
-                            return                       
-                        
-                        case "3":
-                            print('Returning to manage orders')
-                            return
-                        
-                        case _:
-                            print("Invalid option. Please try again.")
-                            return                      
 
             case "3":
-                print("Printing all orders")
-                print(orders)
+                if not all_orders:
+                    print("⚠️ No avaliable order for update.")
+                    continue
+
+                print("\n📋 Orders avaliables:")
+                for idx, order in enumerate(all_orders, start=1):
+                    print(f"{idx}. Código: {order.code} | Cliente: {order.costumer} | Status: {order.status}")
+
+                try:
+                    order_index = int(input("\nSelect a order by code: ")) - 1
+                    order = all_orders[order_index]
+                except (ValueError, IndexError):
+                    print("❌ Invalid Selection.")
+                    continue
+
+                print("\n📦 Selected order:")
+                print(order)
+
+                print("🔄 Choose the new status:")
+                print("1. Accepted")
+                print("2. Making")
+                print("3. Ready")
+                print("4. Waiting Delivery")
+                print("5. Delivering")
+                print("6. Delivered")
+                print("7. Canceled")
+                print("8. Rejected")
+
+                status_choice = input("Choose an option (1-8): ")
+
+                if status_choice == "1":
+                    order.status = "Accepted"
+                elif status_choice == "2":
+                    order.status = "Making"
+                elif status_choice == "3":
+                    order.status = "Ready"
+                elif status_choice == "4":
+                    order.status = "Waiting Delivery"
+                elif status_choice == "5":
+                    order.status = "Delivering"
+                elif status_choice == "6":
+                    order.status = "Delivered"
+                elif status_choice == "7":
+                    order.status = "Canceled"
+                elif status_choice == "8":
+                    order.status = "Rejected"
+                else:
+                    print("❌ Invalid option.")
+                    continue
+
+                print("\n✅ Order updated with sucess!")
+                print(order)
+
             case "4":
-                print("Printing Accepted orders")
-                print(accepted_orders)
+                if not all_orders:
+                    print("⚠️ No orders avaliable.")
+                    continue
+
+                cancellable_orders = [o for o in all_orders if o.status in ("Pending", "Accepted")]
+
+                if not cancellable_orders:
+                    print("⚠️  No orders avaliable for cancelling.")
+                    continue
+
+                print("\n📋 Orders avaliable for cancelling:")
+                for idx, order in enumerate(cancellable_orders, start=1):
+                    print(f"{idx}. Code: {order.code} | Costumer: {order.costumer} | Status: {order.status}")
+
+                try:
+                    order_index = int(input("\nSelecione a order by code: ")) - 1
+                    order = cancellable_orders[order_index]
+                except (ValueError, IndexError):
+                    print("❌ Invalid selection.")
+                    continue
+
+                print("\n📦 Selected order:")
+                print(order)
+
+                print("❗ Choose action:")
+                print("1. Cancel order")
+                print("2. Exit")
+                cancel_choice = input("Choose an option (1 / 2): ")
+
+                if cancel_choice == "1":
+                    order.status = "Canceled"
+                    print(f"\n✅ Order {order.code} canceled with sucess!")
+                    print(order)
+                elif cancel_choice == "2":
+                    print("🔙 Returning to menu orders.")
+                    continue
+                else:
+                    print("❌ Invalid option.")
+                    continue
+
             case "5":
-                print("Printing rejected orders")
-                print(rejected_orders)
-                
-            case "6":
                 print("Returning to Main Menu.")
                 return
             case _:
                 print("Invalid option. Please try again.")
-
 
 def main_menu():
 
@@ -288,7 +418,7 @@ def main_menu():
             case "1":
                 manage_menu_items(catalog)
             case "2":
-                manage_orders(all_orders)
+                manage_orders(all_orders, catalog)
             case "3":
                 print("Exiting the system. Goodbye!")
                 return
@@ -297,15 +427,7 @@ def main_menu():
 
 main_menu()
 
-    
+# comentarios:
 
-# Para mostrar todos os pedidos
-# print(all_orders)
-# Para mostrar apenas os pedidos aceitos
-# print(accepted_orders)
-# Para mostrar apenas os pedidos rejeitados
-# print(rejected_orders)
-# Para mostrar apenas os pedidos prontos: 
-# print(ready_orders)
-# Para mostrar apenas os pedidos cancelados:
-# canceled_orders()
+# O documento pede para criar uma seção de relatorio diario. mas para isso precisaria colocar data nos pedidos.
+# seria bom ter uma seção de filtrar pedidos. Tendo opção: todos os pedidos | filtrar pedidos por status
