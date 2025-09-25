@@ -87,18 +87,20 @@ class Order:
         )
    
 catalog = []
-
-def consults(all_orders):
+costumers = []
+def consults(all_orders, costumers):
 
     choice = ""
-    while choice != "4":
+    width = 60
+    while choice != "5":
         print("\n📋 Consult's menu:")
         print("-" * 40)
-        print("1. View All Orders")
-        print("2. Filter by status")
-        print("3. Sales Report")
-        print("4. Back to Main Menu")
-        choice = input("Choose an option (1 / 2 / 3 / 4): ")
+        print("[1] View All Orders").center(width)
+        print("[2] Filter by status").center(width)
+        print("[3] Sales Report").center(width)
+        print("[4] See all costumers").center(width)
+        print("[5] Back to Main Menu").center(width)
+        choice = input("Choose an option (1 / 2 / 3 / 4 / 5): ").center(width)
 
         match choice:
             case "1":
@@ -116,18 +118,17 @@ def consults(all_orders):
                     print(f"Total: R${o.order_total_price:.2f}")
                     print("-" * 40)
             case "2":
-
                 print("\n📋 Consult's order by status:")
                 print("-" * 40)
-                print("1. Making")
-                print("2. Ready")
-                print("3. Waiting Delivery")
-                print("4. Delivering")
-                print("5. Delivered")
-                print("6. Canceled")
-                print("7. Rejected")
-                print("8. Back to Main Menu")
-                status = input("Choose an option (1 / 2 / 3 / 4 / 5 / 6 / 7 / 8): ")
+                print("[1] Making").center(width)
+                print("[2] Ready").center(width)
+                print("[3] Waiting Delivery").center(width)
+                print("[4] Delivering").center(width)
+                print("[5] Delivered").center(width)
+                print("[6] Canceled").center(width)
+                print("[7] Rejected").center(width)
+                print("[8] Back to Main Menu").center(width)
+                status = input("Choose an option (1 / 2 / 3 / 4 / 5 / 6 / 7 / 8): ").center(width)
 
                 match status:
                     case "1":
@@ -266,25 +267,39 @@ def consults(all_orders):
                     case _:
                         print("Invalid option. Please try again.")
             case "4":
+                for c in costumers:
+                    print("Active costumers:")
+                    print(c)
+            case "5":
                 print("Returning to Main Menu.")
                 return
             case _:
                 print("Invalid option. Please try again.")
 
-def manage_menu_items(catalog):
+catalog = [] # seria necessario ter o array aqui? Ou não? 
 
+def manage_menu_items(catalog):
     choice = ""
+    width = 60
+
     while choice != "4":
-        print("\nMenu Item Management")
-        print("1. Add Item")
-        print("2. Update Item Stock")
-        print("3. View All Items")
-        print("4. Back to Main Menu")
-        choice = input("Choose an option (1 / 2 / 3 / 4): ")
+        print("=" * width)
+        print("🍽️  Item Management Menu".center(width))
+        print("=" * width)
+
+        print("[1] Add Item".center(width))
+        print("[2] Update Item Stock".center(width))
+        print("[3] View All Items".center(width))
+        print("[4] Back to Main Menu\n".center(width))
+        choice = input("Choose an option (1 / 2 / 3 / 4):".center(width))
 
         match choice:
             case "1":
                 code = len(catalog) + 1
+                width = 60
+                print("=" * width)
+                print("➕ Add New Item".center(width))
+                print("=" * width)                
                 name = input("Type a new item name:\n")
                 description = input("Type a description:\n")
                 valid_price = False
@@ -299,18 +314,24 @@ def manage_menu_items(catalog):
                 new_item = Item(code, name, description, price, stock)
                 catalog.append(new_item)
                 print('Item added with sucess')
+
             case "2":
-                item = input("Type the name of the item:\n")
+                width = 60
+                item = input("Type the name of the item:\n".center(width))                
                 for i in catalog:
                     if i.name == item:
                         update_type = ""
                         while update_type != "5":
-                            print("1. Update item`s name")
-                            print("2. Update item`s description")
-                            print("3. Update item`s price")
-                            print("4. Update item`s quantity")
-                            print("5. Back to previous menu")
-                            update_type = input("Choose an option (1 / 2 / 3 / 4 / 5): ")
+                            print("=" * width)
+                            print("🛠️ Update Item".center(width))
+                            print("=" * width)
+                            print("[1] Update item’s name".center(width))
+                            print("[2] Update item’s description".center(width))
+                            print("[3] Update item’s price".center(width))
+                            print("[4] Update item’s quantity".center(width))
+                            print("[5] Back to Previous Menu\n".center(width))
+
+                            update_type = input("Choose an option (1 / 2 / 3 / 4 / 5):".center(width))
                         
                             match update_type:
                                 case "1":
@@ -320,42 +341,49 @@ def manage_menu_items(catalog):
                                 case "3":
                                     i.update_price()
                                 case "4":
-                                    print(f"The item {i.name} has {i.stock} units in stock.")
-                                    quantity = input("Type the new quantity you want to add or take from stock:\nUse a minus sign (-) to decrease stock\n")
+                                    print(f"The item {i.name} has {i.stock} units in stock.".center(width))
+                                    quantity = input("Type the new quantity you want to add or take from stock:\nUse a minus sign (-) to decrease stock\n".center(width))
                                     try:
                                         quantity = quantity.strip()
                                         i.update_stock(quantity)
-                                        print(f"Stock updated. New stock for {i.name}: {i.stock}")
+                                        print(f"Stock updated. New stock for {i.name}: {i.stock}".center(width))
                                     except ValueError as e:
                                         print(e)
                                 case "5":
                                     return
                                 case _:
-                                    print("Invalid option. Please try again.")
+                                    print("❌ Invalid option. Please try again.".center(width))
                 else:
-                    print("Item not found. Please try again.")
+                    print("⚠️ Item not found. Please try again.".center(width))
 
             case "3":
+                width = 60
                 if not catalog:
-                    print("⚠️ No items on the menu.")
+                    print("⚠️ No items on the menu.".center(width))
                     continue
 
-                print("\n📋 Menu list of items:")
-                print("-" * 40)
+                print("=" * width)
+                print("📋 Menu List of Items".center(width))
+                print("=" * width)
+
                 for item in catalog:
-                    print(f"📦 Code: {item.code}")
-                    print(f"📝 Name: {item.name}")
-                    print(f"🖊️ Description: {item.description}")
-                    print(f"💰 Price: R${item.price:.2f}")
-                    print(f"📦 Stock: {item.stock}")
-                    print("-" * 40)
-
+                    print(f"📦 Code: {item.code}".center(width))
+                    print(f"📝 Name: {item.name}".center(width))
+                    print(f"🖊️ Description: {item.description}".center(width))
+                    print(f"💰 Price: R${item.price:.2f}".center(width))
+                    print(f"📦 Stock: {item.stock}".center(width))
+                    print("-" * width)
+                    
             case "4":
-                print("Returning to Main Menu.")
+                width = 60
+                print("↩️ Returning to Main Menu.".center(width))
                 return
-            case _:
-                print("Invalid option. Please try again.")
 
+            case _:
+                width = 60
+                print("❌ Invalid option. Please try again.".center(width))
+
+# manage orders atualizado  #############################################################################
 all_orders = []
 
 def get_orders_by_status(status):
@@ -363,19 +391,30 @@ def get_orders_by_status(status):
 
 def manage_orders(all_orders, catalog):
     choice = ""
+    width = 60
+
     while choice != "5":
-        print("\nMenu Orders Management")
-        print("1. Create a new Order")
-        print("2. Manage Pending Orders")
-        print("3. Update Orders Status")
-        print("4. Cancel Order")
-        print("5. Return to main menu")
-        choice = input("Chose an option(1 / 2 / 3 / 4 / 5): ")
+        print("=" * width)
+        print("📦 Orders Management Menu".center(width))
+        print("=" * width)
+
+        print("[1] Create a new Order".center(width))
+        print("[2] Manage Pending Orders".center(width))
+        print("[3] Update Orders Status".center(width))
+        print("[4] Cancel Order".center(width))
+        print("[5] Return to Main Menu\n".center(width))
+
+        choice = input("Choose an option (1 / 2 / 3 / 4 / 5):".center(width))
         
         match choice:
+# case 1 atualizado #############################################################################
             case "1":
+                name_costumer = input("What is the name of the costumer? ")
+                number_costumer = input("What is the cellphone number of the costumer? ")
+                code_costumer = len(costumers) +1
+                costumer = [code_costumer, name_costumer, number_costumer]
+
                 code = len(all_orders) + 1
-                costumer = input('\nWhat is the name of the costumer? ')
                 items_order = []
                 status = "" 
                 payment = 'Paid'
@@ -443,6 +482,7 @@ def manage_orders(all_orders, catalog):
 
                             order.status = "Pending"
                             all_orders.append(order)
+                            costumers.append(costumer)
 
                             print("\n✅ Order added with sucess!")
                             print("-" * 40)
@@ -462,146 +502,147 @@ def manage_orders(all_orders, catalog):
                         case _:
                             print("Invalid option. Please try again.")
                             continue
+
+# case 2 atualizado #############################################################################
             case "2":
                 pending_orders = get_orders_by_status("Pending")
                 if not pending_orders:
-                    print("No pending orders.")
+                    print("⚠️ No pending orders.".center(width))
                     continue
-                
-                order = pending_orders[0]
-                print("\n📦 Pending Order:")
-                print(order)
 
-                print("1. Accept order")
-                print("2. Reject order")
-                print("3. Return to manage orders")
-                choice = input("Choose an option (1 / 2 / 3): ")
+                order = pending_orders[0]
+                print("=" * width)
+                print("📦 Pending Order".center(width))
+                print("=" * width)
+                print(str(order).center(width))
+
+                print("[1] Accept order".center(width))
+                print("[2] Reject order".center(width))
+                print("[3] Return to Manage Orders\n".center(width))
+                choice = input("Choose an option (1 / 2 / 3):".center(width))
 
                 if choice == "1":
                     order.status = "Accepted"
-                    print("\n✅ Order accepted with sucess!")
-                    print(order)
-
+                    print("✅ Order accepted with success!".center(width))
                 elif choice == "2":
                     order.status = "Rejected"
-                    print("\n❌ Order rejected.")
-                    print(order)                        
-
+                    print("❌ Order rejected.".center(width))
                 elif choice == "3":
-                    print("Returning to manage orders.")
-                    
+                    print("🔙 Returning to Manage Orders...".center(width))
                 else:
-                    print("Invalid option.") 
+                    print("⚠️ Invalid option.".center(width))
                             
-
+# case 3 atualizado #############################################################################
             case "3":
                 if not all_orders:
-                    print("⚠️ No avaliable order for update.")
+                    print("⚠️ No available orders to update.".center(width))
                     continue
 
-                print("\n📋 Orders avaliables:")
+                print("=" * width)
+                print("📋 Orders Available".center(width))
+                print("=" * width)
+
                 for idx, order in enumerate(all_orders, start=1):
-                    print(f"{idx}. Código: {order.code} | Cliente: {order.costumer} | Status: {order.status}")
+                    print(f"{idx}. Code: {order.code} | Costumer: {order.costumer} | Status: {order.status}".center(width))
 
                 try:
-                    order_index = int(input("\nSelect a order by code: ")) - 1
+                    order_index = int(input("Select an order by code:".center(width))) - 1
                     order = all_orders[order_index]
                 except (ValueError, IndexError):
-                    print("❌ Invalid Selection.")
+                    print("❌ Invalid selection.".center(width))
                     continue
 
-                print("\n📦 Selected order:")
-                print(order)
+                print("📦 Selected Order".center(width))
+                print(str(order).center(width))
 
-                print("🔄 Choose the new status:")
-                print("1. Making")
-                print("2. Ready")
-                print("3. Waiting Delivery")
-                print("4. Delivering")
-                print("5. Delivered")
-                print("6. Canceled")
-                print("7. Rejected")
+                print("🔄 Choose new status:".center(width))
+                print("[1] Making".center(width))
+                print("[2] Ready".center(width))
+                print("[3] Waiting Delivery".center(width))
+                print("[4] Delivering".center(width))
+                print("[5] Delivered".center(width))
+                print("[6] Canceled".center(width))
+                print("[7] Rejected\n".center(width))
 
-                status_choice = input("Choose an option (1-7): ")
+                status_choice = input("Choose an option (1-7):".center(width))
 
-                if status_choice == "1":
-                    order.status = "Making"
-                elif status_choice == "2":
-                    order.status = "Ready"
-                elif status_choice == "3":
-                    order.status = "Waiting Delivery"
-                elif status_choice == "4":
-                    order.status = "Delivering"
-                elif status_choice == "5":
-                    order.status = "Delivered"
-                elif status_choice == "6":
-                    order.status = "Canceled"
-                elif status_choice == "7":
-                    order.status = "Rejected"
-                else:
-                    print("❌ Invalid option.")
-                    continue
+                match status_choice:
+                    case "1": order.status = "Making"
+                    case "2": order.status = "Ready"
+                    case "3": order.status = "Waiting Delivery"
+                    case "4": order.status = "Delivering"
+                    case "5": order.status = "Delivered"
+                    case "6": order.status = "Canceled"
+                    case "7": order.status = "Rejected"
+                    case _: 
+                        print("❌ Invalid option.".center(width))
+                        continue
 
-                print("\n✅ Order updated with sucess!")
-                print(order)
+                print("✅ Order updated with success!".center(width))
 
+# case 4 atualizado #############################################################################
             case "4":
                 if not all_orders:
-                    print("⚠️ No orders avaliable.")
+                    print("⚠️ No orders available.".center(width))
                     continue
 
                 cancellable_orders = [o for o in all_orders if o.status in ("Pending", "Accepted")]
-
                 if not cancellable_orders:
-                    print("⚠️  No orders avaliable for cancelling.")
+                    print("⚠️ No cancellable orders available.".center(width))
                     continue
 
-                print("\n📋 Orders avaliable for cancelling:")
+                print("=" * width)
+                print("📋 Orders Available for Cancelling".center(width))
+                print("=" * width)
+
                 for idx, order in enumerate(cancellable_orders, start=1):
-                    print(f"{idx}. Code: {order.code} | Costumer: {order.costumer} | Status: {order.status}")
+                    print(f"{idx}. Code: {order.code} | Costumer: {order.costumer} | Status: {order.status}".center(width))
 
                 try:
-                    order_index = int(input("\nSelecione a order by code: ")) - 1
+                    order_index = int(input("Select an order by code:".center(width))) - 1
                     order = cancellable_orders[order_index]
                 except (ValueError, IndexError):
-                    print("❌ Invalid selection.")
+                    print("❌ Invalid selection.".center(width))
                     continue
 
-                print("\n📦 Selected order:")
-                print(order)
+                print("📦 Selected Order".center(width))
+                print(str(order).center(width))
 
-                print("❗ Choose action:")
-                print("1. Cancel order")
-                print("2. Exit")
-                cancel_choice = input("Choose an option (1 / 2): ")
+                print("❗ Choose action:".center(width))
+                print("[1] Cancel order".center(width))
+                print("[2] Exit\n".center(width))
 
+                cancel_choice = input("Choose an option (1 / 2):".center(width))
                 if cancel_choice == "1":
                     order.status = "Canceled"
-                    print(f"\n✅ Order {order.code} canceled with sucess!")
-                    print(order)
+                    print(f"✅ Order {order.code} canceled with success!".center(width))
                 elif cancel_choice == "2":
-                    print("🔙 Returning to menu orders.")
-                    continue
+                    print("🔙 Returning to Orders Menu...".center(width))
                 else:
-                    print("❌ Invalid option.")
-                    continue
+                    print("❌ Invalid option.".center(width))
 
             case "5":
-                print("Returning to Main Menu.")
+                print("🔙 Returning to Main Menu...".center(width))
                 return
             case _:
-                print("Invalid option. Please try again.")
+                print("❌ Invalid option. Please try again.".center(width))
 
+# main menu atualizado #############################################################################
 def main_menu():
-
     choice = ""
-    while choice != "4":
-        print("\nWelcome to the Food Delivery Ordering System!")
-        print("1. Manage Menu Items")
-        print("2. Manage orders")
-        print("3. Consults")
-        print("4. Exit")
-        choice = input("Chose an option(1 / 2 / 3): ")
+    width = 60
+
+    while choice != "3":
+        print("=" * width)
+        print("🍔 Food Delivery Ordering System 🍕".center(width))
+        print("=" * width)
+
+        print("[1] Manage Menu Items".center(width))
+        print("[2] Manage Orders".center(width))
+        print("3. Consults".center(width))
+        print("4. Exit".center(width))
+
+        choice = input("Choose an option (1 / 2 / 3 / 4):".center(width))
 
         match choice:
             case "1":
@@ -609,16 +650,11 @@ def main_menu():
             case "2":
                 manage_orders(all_orders, catalog)
             case "3":
-                consults(all_orders)
+                consults(all_orders, costumers)
             case "4":
-                print("Exiting the system. Goodbye!")
+                print("\nExiting the system. Goodbye!\n".center(width))
                 return
             case _:
-                print("Invalid option. Please try again.")
+                print("Invalid option. Please try again.".center(width))
 
 main_menu()
-
-# comentarios:
-
-# O documento pede para criar uma seção de relatorio diario. mas para isso precisaria colocar data nos pedidos.
-# seria bom ter uma seção de filtrar pedidos. Tendo opção: todos os pedidos | filtrar pedidos por status
