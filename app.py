@@ -7,6 +7,10 @@ class Item:
         self.stock = stock
 
     def update_stock(self, quantity):
+        try:
+            quantity = int(quantity)
+        except ValueError:
+            raise ValueError("Quantity must be a number.")
         if quantity < 0 and abs(quantity) > self.stock:
             raise ValueError("Insufficient stock to remove the requested quantity.")
         else: 
@@ -15,7 +19,7 @@ class Item:
     def update_name(self):
         confirm = input(f"You are about to change the name of the product {self.name}\n(Confirm? 1. Yes / 2. No ) ")
         if confirm == "1":
-            new_name = input("Type the new name: ")
+            new_name = input("Type the new name: ").strip()
             self.name = new_name
             print(f"The name of the item code:{self.code} has changed to {self.name}")
         else:
@@ -84,6 +88,189 @@ class Order:
    
 catalog = []
 
+def consults(all_orders):
+
+    choice = ""
+    while choice != "4":
+        print("\n📋 Consult's menu:")
+        print("-" * 40)
+        print("1. View All Orders")
+        print("2. Filter by status")
+        print("3. Sales Report")
+        print("4. Back to Main Menu")
+        choice = input("Choose an option (1 / 2 / 3 / 4): ")
+
+        match choice:
+            case "1":
+                if not all_orders:
+                    print("⚠️ There's no orders to show.")
+                    continue
+
+                print("\n📋 List of orders:")
+                print("-" * 40)
+                for o in all_orders:
+                    print(f"Code: {o.code}")
+                    print(f"Costumer: {o.costumer}")
+                    print(f"Items: {', '.join([item.name for item in o.items_order])}")
+                    print(f"Status: {o.status}")
+                    print(f"Total: R${o.order_total_price:.2f}")
+                    print("-" * 40)
+            case "2":
+
+                print("\n📋 Consult's order by status:")
+                print("-" * 40)
+                print("1. Making")
+                print("2. Ready")
+                print("3. Waiting Delivery")
+                print("4. Delivering")
+                print("5. Delivered")
+                print("6. Canceled")
+                print("7. Rejected")
+                print("8. Back to Main Menu")
+                status = input("Choose an option (1 / 2 / 3 / 4 / 5 / 6 / 7 / 8): ")
+
+                match status:
+                    case "1":
+                        print("\n📋 List of orders:")
+                        print("-" * 40)
+                        list = get_orders_by_status("Making")
+                        if len(list) > 0:
+                            for item in list:
+                                print(f"📦 Code: {item.code}")
+                                print(f"📝 Name: {item.name}")
+                                print(f"🖊️ Description: {item.description}")
+                                print(f"💰 Price: R${item.price:.2f}")
+                                print(f"📦 Stock: {item.stock}")
+                                print("-" * 40)
+                            print(f"\n📋 Number of registers: {len(list)}")
+                        else:
+                            print("\nThere's no orders with  current status")
+                    case "2":
+                        print("\n📋 List of orders:")
+                        print("-" * 40)
+                        list = get_orders_by_status("Ready")
+                        if len(list) > 0:
+                            print(f"📦 Code: {item.code}")
+                            print(f"📝 Name: {item.name}")
+                            print(f"🖊️ Description: {item.description}")
+                            print(f"💰 Price: R${item.price:.2f}")
+                            print(f"📦 Stock: {item.stock}")
+                            print("-" * 40)
+                            print(f"\n📋 Number of registers: {len(list)}")
+                        else:
+                            print("\nThere's no orders with  current status")
+                    case "3":
+                        print("\n📋 List of orders:")
+                        print("-" * 40)
+                        list = get_orders_by_status("Waiting Delivery")
+                        if len(list) > 0:
+                            print(f"📦 Code: {item.code}")
+                            print(f"📝 Name: {item.name}")
+                            print(f"🖊️ Description: {item.description}")
+                            print(f"💰 Price: R${item.price:.2f}")
+                            print(f"📦 Stock: {item.stock}")
+                            print("-" * 40)
+                            print(f"\n📋 Number of registers: {len(list)}")
+                        else:
+                            print("\nThere's no orders with  current status")
+                    case "4":
+                        print("\n📋 List of orders:")
+                        print("-" * 40)
+                        list = get_orders_by_status("Delivering")
+                        if len(list) > 0:
+                            print(f"📦 Code: {item.code}")
+                            print(f"📝 Name: {item.name}")
+                            print(f"🖊️ Description: {item.description}")
+                            print(f"💰 Price: R${item.price:.2f}")
+                            print(f"📦 Stock: {item.stock}")
+                            print("-" * 40)
+                            print(f"\n📋 Number of registers: {len(list)}")
+                        else:
+                            print("\nThere's no orders with  current status")
+                    case "5":
+                        print("\n📋 List of orders:")
+                        print("-" * 40)
+                        list = get_orders_by_status("Delivered")
+                        if len(list) > 0:
+                            print(f"📦 Code: {item.code}")
+                            print(f"📝 Name: {item.name}")
+                            print(f"🖊️ Description: {item.description}")
+                            print(f"💰 Price: R${item.price:.2f}")
+                            print(f"📦 Stock: {item.stock}")
+                            print("-" * 40)
+                            print(f"\n📋 Number of registers: {len(list)}")
+                        else:
+                            print("\nThere's no orders with  current status")
+                    case "6":
+                        print("\n📋 List of orders:")
+                        print("-" * 40)
+                        list = get_orders_by_status("Canceled")
+                        if len(list) > 0:
+                            print(f"📦 Code: {item.code}")
+                            print(f"📝 Name: {item.name}")
+                            print(f"🖊️ Description: {item.description}")
+                            print(f"💰 Price: R${item.price:.2f}")
+                            print(f"📦 Stock: {item.stock}")
+                            print("-" * 40)
+                            print(f"\n📋 Number of registers: {len(list)}")
+                        else:
+                            print("\nThere's no orders with  current status")
+                    case "7":
+                        print("\n📋 List of orders:")
+                        print("-" * 40)
+                        list = get_orders_by_status("Rejected")
+                        if len(list) > 0:
+                            print(f"📦 Code: {item.code}")
+                            print(f"📝 Name: {item.name}")
+                            print(f"🖊️ Description: {item.description}")
+                            print(f"💰 Price: R${item.price:.2f}")
+                            print(f"📦 Stock: {item.stock}")
+                            print("-" * 40)
+                            print(f"\n📋 Number of registers: {len(list)}")
+                        else:
+                            print("\nThere's no orders with  current status")
+                    case "8":
+                        print("Returning to Main Menu.")
+                        return
+                    case _:
+                        print("Invalid option. Please try again.")
+            case "3":
+                print("\n📋 Sales reports:")
+                print("-" * 40)
+                print("1. All registers")
+                print("2. Closed sales")
+                print("3. Back to Main Menu")
+                report = input("Choose an option (1 / 2 / 3): ")
+
+                match report:
+                    case "1":
+                        total_price = 0
+                        acc_price = 0
+                        for o in all_orders:
+                            acc_price = o.order_total_price 
+                            total_price = total_price + acc_price   
+                        print(f"\n📋 Number of registers: {len(all_orders)}")                    
+                        print(f"💰 Total value registered: R${total_price}")
+                    case "2":
+                        total_price = 0
+                        acc_price = 0
+                        delivered_orders = get_orders_by_status("Delivered")
+                        for o in delivered_orders:
+                            acc_price = o.order_total_price 
+                            total_price = total_price + acc_price
+                        print(f"\n📋 Number of registers: {len(delivered_orders)}")                    
+                        print(f"💰 Total value registered: R${total_price}")                        
+                    case "3":
+                        print("Returning to previous Menu.")
+                        return
+                    case _:
+                        print("Invalid option. Please try again.")
+            case "4":
+                print("Returning to Main Menu.")
+                return
+            case _:
+                print("Invalid option. Please try again.")
+
 def manage_menu_items(catalog):
 
     choice = ""
@@ -100,7 +287,14 @@ def manage_menu_items(catalog):
                 code = len(catalog) + 1
                 name = input("Type a new item name:\n")
                 description = input("Type a description:\n")
-                price = float(input("Type the new item`s price: \nEx: 8.00 / 12.50\n"))
+                valid_price = False
+                while not valid_price:
+                    try:
+                        price = input("Type the new item`s price: \nEx: 8.00 / 12.50\n")
+                        price = float(price)
+                        valid_price = True
+                    except ValueError:
+                        print("Price must be a positive number")
                 stock = int(input("How many items will be add:\n"))
                 new_item = Item(code, name, description, price, stock)
                 catalog.append(new_item)
@@ -127,8 +321,9 @@ def manage_menu_items(catalog):
                                     i.update_price()
                                 case "4":
                                     print(f"The item {i.name} has {i.stock} units in stock.")
-                                    quantity = int(input("Type the new quantity you want to add or take from stock:\n Use a minus sign (-) decrease stock\n"))
+                                    quantity = input("Type the new quantity you want to add or take from stock:\nUse a minus sign (-) to decrease stock\n")
                                     try:
+                                        quantity = quantity.strip()
                                         i.update_stock(quantity)
                                         print(f"Stock updated. New stock for {i.name}: {i.stock}")
                                     except ValueError as e:
@@ -208,25 +403,23 @@ def manage_orders(all_orders, catalog):
                                 print(f"📦 Stock: {item.stock}")
                                 print("-" * 40)
                             catalog_code = int(input('Choose a item by code: '))
+                            found = False
 
                             for item in catalog:
-                                if item.code == catalog_code and item.stock > 0:
-                                    print(f'\nItem {catalog_code} added with sucess')
-                                    items_order.append(item)
-                                    print(f'\n{costumer}`s order items are: {[i.name for i in items_order]}')
-                                    item.update_stock(-1)
-                                    print(f'The current stock for this item is: {item.stock}')
-                                    
-                                elif item.code != catalog_code:
-                                    print('Item not found')
-                                    break
-
-                                elif item.stock <= 0:
-                                    print('Stock insuficient')
-                                    print(f'The current stock for this item is: {item.stock}\n')
-                                    break
-                                else:
-                                    print('Verify informations.')
+                                if item.code ==catalog_code:
+                                    found = True
+                                    if item.stock > 0:
+                                        print(f"\nItem {catalog_code} added with success")
+                                        items_order.append(item)
+                                        print(f"\n{costumer}'s order items are: {[i.name for i in items_order]}")
+                                        item.update_stock(-1)
+                                        print(f"The current stock for this item is: {item.stock}")
+                                    else:
+                                        print("Stock insuficiente")
+                                        print(f"The current stock for this item is: {item.stock}\n")
+                                        break
+                                if not found:
+                                    print("Item not found")
                             
                         case "2":
                             if len(items_order) == 0:
@@ -402,11 +595,12 @@ def manage_orders(all_orders, catalog):
 def main_menu():
 
     choice = ""
-    while choice != "3":
+    while choice != "4":
         print("\nWelcome to the Food Delivery Ordering System!")
         print("1. Manage Menu Items")
         print("2. Manage orders")
-        print("3. Exit")
+        print("3. Consults")
+        print("4. Exit")
         choice = input("Chose an option(1 / 2 / 3): ")
 
         match choice:
@@ -415,6 +609,8 @@ def main_menu():
             case "2":
                 manage_orders(all_orders, catalog)
             case "3":
+                consults(all_orders)
+            case "4":
                 print("Exiting the system. Goodbye!")
                 return
             case _:
