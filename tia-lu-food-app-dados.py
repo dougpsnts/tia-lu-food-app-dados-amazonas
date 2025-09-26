@@ -95,12 +95,12 @@ def consults(all_orders, costumers):
     while choice != "5":
         print("\n📋 Consult's menu:")
         print("-" * 40)
-        print("[1] View All Orders").center(width)
-        print("[2] Filter by status").center(width)
-        print("[3] Sales Report").center(width)
-        print("[4] See all costumers").center(width)
-        print("[5] Back to Main Menu").center(width)
-        choice = input("Choose an option (1 / 2 / 3 / 4 / 5): ").center(width)
+        print("[1] View All Orders".center(width))
+        print("[2] Filter by status".center(width))
+        print("[3] Sales Report".center(width))
+        print("[4] See all costumers".center(width))
+        print("[5] Back to Main Menu".center(width))
+        choice = input("Choose an option (1 / 2 / 3 / 4 / 5): ".center(width))
 
         match choice:
             case "1":
@@ -120,15 +120,15 @@ def consults(all_orders, costumers):
             case "2":
                 print("\n📋 Consult's order by status:")
                 print("-" * 40)
-                print("[1] Making").center(width)
-                print("[2] Ready").center(width)
-                print("[3] Waiting Delivery").center(width)
-                print("[4] Delivering").center(width)
-                print("[5] Delivered").center(width)
-                print("[6] Canceled").center(width)
-                print("[7] Rejected").center(width)
-                print("[8] Back to Main Menu").center(width)
-                status = input("Choose an option (1 / 2 / 3 / 4 / 5 / 6 / 7 / 8): ").center(width)
+                print("[1] Making".center(width))
+                print("[2] Ready".center(width))
+                print("[3] Waiting Delivery".center(width))
+                print("[4] Delivering".center(width))
+                print("[5] Delivered".center(width))
+                print("[6] Canceled".center(width))
+                print("[7] Rejected".center(width))
+                print("[8] Back to Main Menu".center(width))
+                status = input("Choose an option (1 / 2 / 3 / 4 / 5 / 6 / 7 / 8): ".center(width))
 
                 match status:
                     case "1":
@@ -136,12 +136,11 @@ def consults(all_orders, costumers):
                         print("-" * 40)
                         list = get_orders_by_status("Making")
                         if len(list) > 0:
-                            for item in list:
-                                print(f"📦 Code: {item.code}")
-                                print(f"📝 Name: {item.name}")
-                                print(f"🖊️ Description: {item.description}")
-                                print(f"💰 Price: R${item.price:.2f}")
-                                print(f"📦 Stock: {item.stock}")
+                            for order in list:
+                                print(f"📦 Code: {order.code}")
+                                print(f"👤 Costumer: {order.costumer}")
+                                print(f"🛒 Items: {', '.join([item.name for item in order.items_order])}")
+                                print(f"💰 Price: R${order.order_total_price:.2f}")
                                 print("-" * 40)
                             print(f"\n📋 Number of registers: {len(list)}")
                         else:
@@ -151,97 +150,97 @@ def consults(all_orders, costumers):
                         print("-" * 40)
                         list = get_orders_by_status("Ready")
                         if len(list) > 0:
-                            print(f"📦 Code: {item.code}")
-                            print(f"📝 Name: {item.name}")
-                            print(f"🖊️ Description: {item.description}")
-                            print(f"💰 Price: R${item.price:.2f}")
-                            print(f"📦 Stock: {item.stock}")
-                            print("-" * 40)
+                            for order in list:
+                                print(f"📦 Code: {order.code}")
+                                print(f"👤 Costumer: {order.costumer}")
+                                print(f"🛒 Items: {', '.join([item.name for item in order.items_order])}")
+                                print(f"💰 Price: R${order.order_total_price:.2f}")
+                                print("-" * 40)
                             print(f"\n📋 Number of registers: {len(list)}")
                         else:
-                            print("\nThere's no orders with  current status")
+                            print("\nThere's no orders with  current status".center(width))
                     case "3":
                         print("\n📋 List of orders:")
                         print("-" * 40)
                         list = get_orders_by_status("Waiting Delivery")
                         if len(list) > 0:
-                            print(f"📦 Code: {item.code}")
-                            print(f"📝 Name: {item.name}")
-                            print(f"🖊️ Description: {item.description}")
-                            print(f"💰 Price: R${item.price:.2f}")
-                            print(f"📦 Stock: {item.stock}")
-                            print("-" * 40)
+                            for order in list:
+                                print(f"📦 Code: {order.code}")
+                                print(f"👤 Costumer: {order.costumer}")
+                                print(f"🛒 Items: {', '.join([item.name for item in order.items_order])}")
+                                print(f"💰 Price: R${order.order_total_price:.2f}")
+                                print("-" * 40)
                             print(f"\n📋 Number of registers: {len(list)}")
                         else:
-                            print("\nThere's no orders with  current status")
+                            print("\nThere's no orders with  current status".center(width))
                     case "4":
                         print("\n📋 List of orders:")
                         print("-" * 40)
                         list = get_orders_by_status("Delivering")
                         if len(list) > 0:
-                            print(f"📦 Code: {item.code}")
-                            print(f"📝 Name: {item.name}")
-                            print(f"🖊️ Description: {item.description}")
-                            print(f"💰 Price: R${item.price:.2f}")
-                            print(f"📦 Stock: {item.stock}")
-                            print("-" * 40)
+                            for order in list:
+                                print(f"📦 Code: {order.code}")
+                                print(f"👤 Costumer: {order.costumer}")
+                                print(f"🛒 Items: {', '.join([item.name for item in order.items_order])}")
+                                print(f"💰 Price: R${order.order_total_price:.2f}")
+                                print("-" * 40)
                             print(f"\n📋 Number of registers: {len(list)}")
                         else:
-                            print("\nThere's no orders with  current status")
+                            print("\nThere's no orders with  current status".center(width))
                     case "5":
                         print("\n📋 List of orders:")
                         print("-" * 40)
                         list = get_orders_by_status("Delivered")
                         if len(list) > 0:
-                            print(f"📦 Code: {item.code}")
-                            print(f"📝 Name: {item.name}")
-                            print(f"🖊️ Description: {item.description}")
-                            print(f"💰 Price: R${item.price:.2f}")
-                            print(f"📦 Stock: {item.stock}")
-                            print("-" * 40)
+                            for order in list:
+                                print(f"📦 Code: {order.code}")
+                                print(f"👤 Costumer: {order.costumer}")
+                                print(f"🛒 Items: {', '.join([item.name for item in order.items_order])}")
+                                print(f"💰 Price: R${order.order_total_price:.2f}")
+                                print("-" * 40)
                             print(f"\n📋 Number of registers: {len(list)}")
                         else:
-                            print("\nThere's no orders with  current status")
+                            print("\nThere's no orders with  current status".center(width))
                     case "6":
                         print("\n📋 List of orders:")
                         print("-" * 40)
                         list = get_orders_by_status("Canceled")
                         if len(list) > 0:
-                            print(f"📦 Code: {item.code}")
-                            print(f"📝 Name: {item.name}")
-                            print(f"🖊️ Description: {item.description}")
-                            print(f"💰 Price: R${item.price:.2f}")
-                            print(f"📦 Stock: {item.stock}")
-                            print("-" * 40)
+                            for order in list:
+                                print(f"📦 Code: {order.code}")
+                                print(f"👤 Costumer: {order.costumer}")
+                                print(f"🛒 Items: {', '.join([item.name for item in order.items_order])}")
+                                print(f"💰 Price: R${order.order_total_price:.2f}")
+                                print("-" * 40)
                             print(f"\n📋 Number of registers: {len(list)}")
                         else:
-                            print("\nThere's no orders with  current status")
+                            print("\nThere's no orders with  current status".center(width))
                     case "7":
                         print("\n📋 List of orders:")
                         print("-" * 40)
                         list = get_orders_by_status("Rejected")
                         if len(list) > 0:
-                            print(f"📦 Code: {item.code}")
-                            print(f"📝 Name: {item.name}")
-                            print(f"🖊️ Description: {item.description}")
-                            print(f"💰 Price: R${item.price:.2f}")
-                            print(f"📦 Stock: {item.stock}")
-                            print("-" * 40)
+                            for order in list:
+                                print(f"📦 Code: {order.code}")
+                                print(f"👤 Costumer: {order.costumer}")
+                                print(f"🛒 Items: {', '.join([item.name for item in order.items_order])}")
+                                print(f"💰 Price: R${order.order_total_price:.2f}")
+                                print("-" * 40)
                             print(f"\n📋 Number of registers: {len(list)}")
                         else:
-                            print("\nThere's no orders with  current status")
+                            print("\nThere's no orders with  current status".center(width))
                     case "8":
-                        print("Returning to Main Menu.")
+                        print("🔙Returning to Main Menu.".center(width))
                         return
                     case _:
-                        print("Invalid option. Please try again.")
+                        print("Invalid option. Please try again.".center(width))
             case "3":
-                print("\n📋 Sales reports:")
+                print("\n📋 Sales reports:".center(width))
                 print("-" * 40)
-                print("1. All registers")
-                print("2. Closed sales")
-                print("3. Back to Main Menu")
-                report = input("Choose an option (1 / 2 / 3): ")
+                print("[1] All registers".center(width))
+                print("[2] Closed sales".center(width))
+                print("[3] Back to Main Menu".center(width))
+                report = input("Choose an option (1 / 2 / 3): ".center(width))
 
                 match report:
                     case "1":
@@ -262,21 +261,19 @@ def consults(all_orders, costumers):
                         print(f"\n📋 Number of registers: {len(delivered_orders)}")                    
                         print(f"💰 Total value registered: R${total_price}")                        
                     case "3":
-                        print("Returning to previous Menu.")
+                        print("🔙Returning to previous Menu.".center(width))
                         return
                     case _:
-                        print("Invalid option. Please try again.")
+                        print("Invalid option. Please try again.".center(width))
             case "4":
                 for c in costumers:
                     print("Active costumers:")
                     print(c)
             case "5":
-                print("Returning to Main Menu.")
+                print("🔙Returning to Main Menu.".center(width))
                 return
             case _:
-                print("Invalid option. Please try again.")
-
-catalog = [] # seria necessario ter o array aqui? Ou não? 
+                print("Invalid option. Please try again.".center(width))
 
 def manage_menu_items(catalog):
     choice = ""
@@ -632,15 +629,15 @@ def main_menu():
     choice = ""
     width = 60
 
-    while choice != "3":
+    while choice != "4":
         print("=" * width)
         print("🍔 Food Delivery Ordering System 🍕".center(width))
         print("=" * width)
 
         print("[1] Manage Menu Items".center(width))
         print("[2] Manage Orders".center(width))
-        print("3. Consults".center(width))
-        print("4. Exit".center(width))
+        print("[3] Consults".center(width))
+        print("[4] Exit".center(width))
 
         choice = input("Choose an option (1 / 2 / 3 / 4):".center(width))
 
