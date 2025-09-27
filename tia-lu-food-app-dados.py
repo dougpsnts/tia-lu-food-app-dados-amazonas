@@ -285,7 +285,7 @@ def manage_menu_items(catalog):
         print("=" * width)
 
         print("[1] Add Item".center(width))
-        print("[2] Update Item Stock".center(width))
+        print("[2] Update Item".center(width))
         print("[3] View All Items".center(width))
         print("[4] Back to Main Menu\n".center(width))
         choice = input("Choose an option (1 / 2 / 3 / 4):".center(width))
@@ -367,7 +367,7 @@ def manage_menu_items(catalog):
                     print(f"📦 Code: {item.code}".center(width))
                     print(f"📝 Name: {item.name}".center(width))
                     print(f"🖊️ Description: {item.description}".center(width))
-                    print(f"💰 Price: R${item.price:.2f}".center(width))
+                    print(f"💰 Price: R${item.price}".center(width))
                     print(f"📦 Stock: {item.stock}".center(width))
                     print("-" * width)
                     
