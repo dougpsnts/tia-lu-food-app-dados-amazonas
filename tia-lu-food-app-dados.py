@@ -500,7 +500,6 @@ def manage_orders(all_orders, catalog):
                             print("Invalid option. Please try again.")
                             continue
 
-# case 2 atualizado #############################################################################
             case "2":
                 pending_orders = get_orders_by_status("Pending")
                 if not pending_orders:
@@ -523,13 +522,14 @@ def manage_orders(all_orders, catalog):
                     print("✅ Order accepted with success!".center(width))
                 elif choice == "2":
                     order.status = "Rejected"
+                    for item in order: 
+                        item.update_stock(+1)
                     print("❌ Order rejected.".center(width))
                 elif choice == "3":
                     print("🔙 Returning to Manage Orders...".center(width))
                 else:
                     print("⚠️ Invalid option.".center(width))
                             
-# case 3 atualizado #############################################################################
             case "3":
                 if not all_orders:
                     print("⚠️ No available orders to update.".center(width))
@@ -558,10 +558,8 @@ def manage_orders(all_orders, catalog):
                 print("[3] Waiting Delivery".center(width))
                 print("[4] Delivering".center(width))
                 print("[5] Delivered".center(width))
-                print("[6] Canceled".center(width))
-                print("[7] Rejected\n".center(width))
 
-                status_choice = input("Choose an option (1-7):".center(width))
+                status_choice = input("Choose an option (1-5):".center(width))
 
                 match status_choice:
                     case "1": order.status = "Making"
@@ -569,15 +567,12 @@ def manage_orders(all_orders, catalog):
                     case "3": order.status = "Waiting Delivery"
                     case "4": order.status = "Delivering"
                     case "5": order.status = "Delivered"
-                    case "6": order.status = "Canceled"
-                    case "7": order.status = "Rejected"
                     case _: 
                         print("❌ Invalid option.".center(width))
                         continue
 
                 print("✅ Order updated with success!".center(width))
 
-# case 4 atualizado #############################################################################
             case "4":
                 if not all_orders:
                     print("⚠️ No orders available.".center(width))
@@ -610,13 +605,16 @@ def manage_orders(all_orders, catalog):
                 print("[2] Exit\n".center(width))
 
                 cancel_choice = input("Choose an option (1 / 2):".center(width))
-                if cancel_choice == "1":
-                    order.status = "Canceled"
-                    print(f"✅ Order {order.code} canceled with success!".center(width))
-                elif cancel_choice == "2":
-                    print("🔙 Returning to Orders Menu...".center(width))
-                else:
-                    print("❌ Invalid option.".center(width))
+                match cancel_choice:
+                    case "1":
+                        order.status = "Canceled"
+                        for item in order.items_order:
+                            item.update_stock(+1)
+                        print(f"✅ Order {order.code} canceled with success!".center(width))
+                    case "2":
+                        print("🔙 Returning to Orders Menu...".center(width))
+                    case _:
+                        print("❌ Invalid option.".center(width))
 
             case "5":
                 print("🔙 Returning to Main Menu...".center(width))
@@ -624,7 +622,6 @@ def manage_orders(all_orders, catalog):
             case _:
                 print("❌ Invalid option. Please try again.".center(width))
 
-# main menu atualizado #############################################################################
 def main_menu():
     choice = ""
     width = 60
